@@ -217,9 +217,11 @@ select {
   font-size: 0.9375rem;
   color: var(--color-charcoal);
   background-color: #FFFFFF;
-  border: 1px solid var(--color-taupe);
+  border: 1px solid #bcaea4;
   padding: 0.75rem 1rem;
   width: 100%;
+  min-height: 3rem;
+  box-shadow: 0 0 0 1px rgba(188, 174, 164, 0.08);
   transition: border-color 0.2s ease;
   outline: none;
 }
@@ -228,6 +230,13 @@ input:focus,
 textarea:focus,
 select:focus {
   border-color: var(--color-espresso);
+  box-shadow: 0 0 0 2px rgba(111, 35, 56, 0.12);
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+  border-color: var(--color-charcoal-800);
 }
 
 input::placeholder,
@@ -253,6 +262,30 @@ label > span:first-child {
 label > input[type="checkbox"],
 label > input[type="radio"] {
   width: auto;
+}
+
+.admin-form input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.admin-form textarea,
+.admin-form select {
+  display: block;
+  background-color: #FFFFFF;
+}
+
+.admin-form textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.admin-form input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):hover,
+.admin-form textarea:hover,
+.admin-form select:hover {
+  border-color: var(--color-charcoal-800);
+}
+
+.admin-form input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+.admin-form textarea:focus,
+.admin-form select:focus {
+  border-color: var(--color-espresso);
 }
 
 /* ============================================================

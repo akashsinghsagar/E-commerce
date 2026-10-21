@@ -110,12 +110,12 @@ export default function AdminDashboard() {
   return (
     <main className="admin-shell min-h-screen bg-ivory">
       <div className="flex min-h-screen">
-        <aside className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col transform border-r border-charcoal-800 bg-charcoal p-6 text-white transition-transform lg:static lg:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <aside className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col transform border-r border-charcoal-800 bg-charcoal p-6 text-white transition-transform lg:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
           <div className="flex items-center justify-between">
             <Link href="/" className="font-serif text-2xl tracking-[0.15em]">LADDI</Link>
             <button type="button" onClick={() => setMobileOpen(false)} className="lg:hidden" aria-label="Close admin navigation"><X size={20} /></button>
           </div>
-          <p className="mt-2 text-[10px] uppercase tracking-[0.18em] text-white/45">Demo admin studio</p>
+          <p className="mt-2 text-[10px] uppercase tracking-[0.18em] text-white">Demo admin studio</p>
           <nav className="mt-10 space-y-1.5">
             {sections.map(({ id, label, icon: Icon }) => (
               <button type="button" key={id} onClick={() => navigate(id)} className={`flex w-full items-center gap-3 rounded-sm px-4 py-3 text-left text-sm transition-colors ${section === id ? 'bg-espresso text-white shadow-sm' : 'text-white/65 hover:bg-white/10 hover:text-white'}`}>
@@ -124,7 +124,7 @@ export default function AdminDashboard() {
             ))}
           </nav>
           <div className="mt-auto border-t border-white/10 pt-6">
-            <p className="text-xs leading-relaxed text-white/40">Admin workspace for your LADDI catalogue and orders.</p>
+            <p className="text-xs leading-relaxed text-white">Admin workspace for your LADDI catalogue and orders.</p>
             <div className="mt-5 flex items-center gap-3">
               <Link href="/" className="flex items-center gap-2 text-xs text-white/60 hover:text-white"><ExternalLink size={13} /> Storefront</Link>
               <button type="button" onClick={logout} className="flex items-center gap-2 text-xs text-white/60 hover:text-white"><LogOut size={13} /> Sign out</button>
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
         </aside>
         {mobileOpen && <button type="button" onClick={() => setMobileOpen(false)} className="fixed inset-0 z-40 bg-charcoal/50 lg:hidden" aria-label="Close navigation overlay" />}
 
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 lg:ml-72">
           <header className="sticky top-0 z-30 flex items-center justify-between border-b border-taupe bg-ivory/95 px-5 py-4 backdrop-blur lg:px-10">
             <button type="button" onClick={() => setMobileOpen(true)} className="lg:hidden" aria-label="Open admin navigation"><Menu size={21} /></button>
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-muted"><BarChart3 size={15} /> LADDI / {section}</div>
