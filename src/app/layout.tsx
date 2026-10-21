@@ -1,10 +1,8 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
-import AnnouncementBar from '@/components/layout/AnnouncementBar';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import AuthSessionProvider from '@/components/auth/AuthSessionProvider';
+import SiteChrome from '@/components/layout/SiteChrome';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -57,10 +55,7 @@ export default function RootLayout({
     >
       <body className="font-sans bg-ivory text-charcoal antialiased">
         <AuthSessionProvider />
-        <AnnouncementBar />
-        <Header />
-        <main id="main-content">{children}</main>
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

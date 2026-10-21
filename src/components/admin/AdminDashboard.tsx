@@ -13,6 +13,8 @@ import {
   ShoppingCart,
   Users,
   X,
+  LogOut,
+  ExternalLink,
 } from 'lucide-react';
 import { demoOrders } from '@/data/demo';
 import ProductManager from '@/components/admin/ProductManager';
@@ -20,6 +22,7 @@ import { useProductStore } from '@/store/products';
 import type { Order, OrderStatus, Product } from '@/types';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/env';
+import { useAuthStore } from '@/store/auth';
 
 type AdminSection = 'overview' | 'products' | 'orders' | 'inventory' | 'customers';
 
@@ -48,6 +51,7 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState('');
   const [orderFilter, setOrderFilter] = useState<'all' | OrderStatus>('all');
   const [loading, setLoading] = useState(false);
+  const logout = useAuthStore((state) => state.logout);
   const [access, setAccess] = useState<'checking' | 'allowed' | 'denied' | 'setup'>(
     isSupabaseConfigured() ? 'checking' : 'setup',
   );
@@ -104,30 +108,36 @@ export default function AdminDashboard() {
   };
 
   return (
-    <main className="min-h-screen bg-ivory">
+    <main className="admin-shell min-h-screen bg-ivory">
       <div className="flex min-h-screen">
-        <aside className={`fixed inset-y-0 left-0 z-50 w-72 transform border-r border-taupe bg-charcoal p-6 text-white transition-transform lg:static lg:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <aside className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col transform border-r border-charcoal-800 bg-charcoal p-6 text-white transition-transform lg:static lg:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
           <div className="flex items-center justify-between">
             <Link href="/" className="font-serif text-2xl tracking-[0.15em]">LADDI</Link>
             <button type="button" onClick={() => setMobileOpen(false)} className="lg:hidden" aria-label="Close admin navigation"><X size={20} /></button>
           </div>
           <p className="mt-2 text-[10px] uppercase tracking-[0.18em] text-white/45">Demo admin studio</p>
-          <nav className="mt-10 space-y-2">
+          <nav className="mt-10 space-y-1.5">
             {sections.map(({ id, label, icon: Icon }) => (
-              <button type="button" key={id} onClick={() => navigate(id)} className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-colors ${section === id ? 'bg-espresso text-white' : 'text-white/65 hover:bg-white/10 hover:text-white'}`}>
+              <button type="button" key={id} onClick={() => navigate(id)} className={`flex w-full items-center gap-3 rounded-sm px-4 py-3 text-left text-sm transition-colors ${section === id ? 'bg-espresso text-white shadow-sm' : 'text-white/65 hover:bg-white/10 hover:text-white'}`}>
                 <Icon size={17} /> {label}
               </button>
             ))}
           </nav>
-          <div className="mt-auto pt-12 text-xs leading-relaxed text-white/40">Frontend-only demo. Admin authorization and data persistence require a secure backend.</div>
+          <div className="mt-auto border-t border-white/10 pt-6">
+            <p className="text-xs leading-relaxed text-white/40">Admin workspace for your LADDI catalogue and orders.</p>
+            <div className="mt-5 flex items-center gap-3">
+              <Link href="/" className="flex items-center gap-2 text-xs text-white/60 hover:text-white"><ExternalLink size={13} /> Storefront</Link>
+              <button type="button" onClick={logout} className="flex items-center gap-2 text-xs text-white/60 hover:text-white"><LogOut size={13} /> Sign out</button>
+            </div>
+          </div>
         </aside>
         {mobileOpen && <button type="button" onClick={() => setMobileOpen(false)} className="fixed inset-0 z-40 bg-charcoal/50 lg:hidden" aria-label="Close navigation overlay" />}
 
         <div className="min-w-0 flex-1">
           <header className="sticky top-0 z-30 flex items-center justify-between border-b border-taupe bg-ivory/95 px-5 py-4 backdrop-blur lg:px-10">
             <button type="button" onClick={() => setMobileOpen(true)} className="lg:hidden" aria-label="Open admin navigation"><Menu size={21} /></button>
-            <div className="hidden items-center gap-2 text-xs uppercase tracking-[0.15em] text-muted sm:flex"><BarChart3 size={15} /> Admin / {section}</div>
-            <span className="ml-auto text-xs text-muted">DEMO MODE</span>
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-muted"><BarChart3 size={15} /> LADDI / {section}</div>
+            <span className="ml-auto rounded-full border border-taupe px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted">Admin studio</span>
           </header>
           <div className="mx-auto max-w-7xl px-5 py-8 lg:px-10 lg:py-12">
             {section === 'overview' && <Overview orders={orders} revenue={revenue} products={products} customers={customers.length} lowStock={lowStock.length} onNavigate={navigate} />}
