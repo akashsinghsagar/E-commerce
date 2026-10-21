@@ -28,6 +28,9 @@
   --color-muted: #77706A;
   --color-taupe: #D4C8BE;
   --color-taupe-light: #E5DCD4;
+  --color-sage: #6F8068;
+  --color-sage-dark: #3F5540;
+  --color-sage-light: #E6EDE1;
 
   /* Font families */
   --font-serif: "Playfair Display", Georgia, serif;
@@ -56,6 +59,10 @@ body {
   color: var(--color-charcoal);
   background-color: var(--color-ivory);
   line-height: 1.6;
+}
+
+.text-white {
+  color: #FFFFFF;
 }
 
 /* ============================================================
@@ -110,14 +117,26 @@ a {
 }
 
 @media (max-width: 768px) {
+  .container-narrow,
+  .container-wide {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
   .section-padding {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    padding-top: 2.75rem;
+    padding-bottom: 2.75rem;
   }
 
   h1 { font-size: 2rem; }
   h2 { font-size: 1.75rem; }
   h3 { font-size: 1.375rem; }
+
+  .btn {
+    min-height: 3rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
 }
 
 /* ============================================================

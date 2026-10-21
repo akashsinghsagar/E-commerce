@@ -26,7 +26,7 @@ export default function AnnouncementBar() {
     <div className="bg-espresso text-white relative" id="announcement-bar">
       <div className="container-narrow flex items-center justify-center py-2.5">
         <p
-          className="text-xs tracking-widest uppercase text-center font-sans animate-fade-in"
+          className="text-xs tracking-widest uppercase text-center font-sans text-white animate-fade-in"
           key={currentIndex}
         >
           {announcements[currentIndex]}

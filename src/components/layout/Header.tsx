@@ -68,7 +68,7 @@ export default function Header() {
       >
         {/* Main header */}
         <div className="container-narrow">
-          <div className="flex items-center justify-between py-4 lg:py-5">
+          <div className="flex items-center justify-between py-3.5 lg:py-5">
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMenuOpen(true)}
@@ -100,7 +100,7 @@ export default function Header() {
             </nav>
 
             {/* Action icons */}
-            <div className="flex items-center gap-3 lg:gap-4" id="header-actions">
+            <div className="flex items-center gap-2.5 lg:gap-4" id="header-actions">
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className="text-charcoal hover:text-espresso transition-colors p-1"
@@ -188,7 +188,7 @@ export default function Header() {
             className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-ivory z-50 lg:hidden animate-slide-right overflow-y-auto"
             id="mobile-menu"
           >
-            <div className="flex items-center justify-between p-6 border-b border-taupe">
+            <div className="flex items-center justify-between p-5 border-b border-taupe">
               <span className="font-serif text-xl tracking-[0.15em] font-medium">LADDI</span>
               <button
                 onClick={() => setIsMenuOpen(false)}
@@ -198,7 +198,7 @@ export default function Header() {
                 <X size={22} />
               </button>
             </div>
-            <nav className="p-6 flex flex-col gap-1">
+            <nav className="p-5 flex flex-col gap-1">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
