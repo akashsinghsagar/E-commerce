@@ -24,14 +24,16 @@ In Supabase Dashboard:
 2. Create a new query.
 3. Paste and run `supabase/migrations/001_catalogue.sql` once.
 4. Paste and run `supabase/migrations/002_product_collections.sql` once.
-5. Confirm that `categories`, `products`, `product_images`,
+5. Paste and run `supabase/migrations/003_seed_catalogue_categories.sql` once.
+6. Confirm that `categories`, `products`, `product_images`,
    `product_variants`, and `profiles` exist under `public`.
-6. Confirm that RLS is enabled on all five public tables.
+7. Confirm that RLS is enabled on all five public tables.
 
 The scripts do not seed products, delete rows, or alter existing product
 records. The second migration adds the merchandising flags used by the
-homepage and collection pages. It creates the `product-images` bucket only if
-it does not exist.
+homepage and collection pages. The third migration initializes the canonical
+storefront categories without duplicating existing slugs. It creates the
+`product-images` bucket only if it does not exist.
 
 ## 3. Configure the first administrator
 

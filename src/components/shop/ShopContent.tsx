@@ -63,7 +63,14 @@ export default function ShopContent() {
       const matchesSearch = !query
         || [product.name, product.categoryName, product.description, ...product.tags]
           .join(' ').toLowerCase().includes(query);
-      const matchesCategory = !category || product.categoryId === categories.find((item) => item.slug === category)?.id;
+      const selectedCategory = categories.find((item) => item.slug === category);
+      const matchesCategory = !category || (
+        selectedCategory !== undefined
+        && (
+          product.categoryId === selectedCategory.id
+          || product.categoryName.toLowerCase() === selectedCategory.name.toLowerCase()
+        )
+      );
       const matchesCollection = !collection || product.collectionIds.includes(
         demoCollections.find((item) => item.slug === collection)?.id || '',
       );
