@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Truck, Shield, Undo2, Sparkles } from 'lucide-react';
+import { ArrowRight, Leaf, Truck, Shield, Undo2, Sparkles } from 'lucide-react';
 import HomeProductSections from '@/components/home/HomeProductSections';
 import HomeCategories from '@/components/home/HomeCategories';
 import Newsletter from '@/components/sections/Newsletter';
@@ -44,9 +44,9 @@ export default function HomePage() {
       {/* ── Hero Section ──────────────────────────────────── */}
       <section className="relative bg-beige overflow-hidden" id="hero-section">
         <div className="container-wide">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-[65vh] lg:min-h-[80vh]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-0 lg:min-h-[80vh]">
             {/* Text */}
-            <div className="flex flex-col justify-center py-16 lg:py-24 lg:pr-16 order-2 lg:order-1">
+            <div className="flex flex-col justify-center px-1 py-10 sm:py-14 lg:px-0 lg:py-24 lg:pr-16 order-2 lg:order-1">
               <p className="text-xs tracking-[0.2em] uppercase text-muted font-medium mb-4 animate-fade-in">
                 The Festive Edit — Autumn 2026
               </p>
@@ -61,19 +61,19 @@ export default function HomePage() {
                 Discover handcrafted pieces that honour India&apos;s rich textile heritage
                 with a contemporary, minimalist sensibility.
               </p>
-              <div className="flex flex-wrap gap-4 animate-fade-in delay-300">
-                <Link href="/shop" className="btn btn-primary btn-large">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in delay-300">
+                <Link href="/shop" className="btn btn-primary btn-large w-full sm:w-auto">
                   Explore the Collection
                   <ArrowRight size={16} />
                 </Link>
-                <Link href="/shop" className="btn btn-secondary btn-large">
+                <Link href="/shop" className="btn btn-secondary btn-large w-full sm:w-auto">
                   Our Story
                 </Link>
               </div>
             </div>
 
             {/* Hero campaign image */}
-            <div className="relative bg-beige-300 min-h-[50vh] lg:min-h-full order-1 lg:order-2 overflow-hidden">
+            <div className="relative bg-beige-300 aspect-[4/5] lg:aspect-auto lg:min-h-full order-1 lg:order-2 overflow-hidden">
               <Image
                 src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
                 alt="Woman wearing an elegant contemporary Indian outfit"
@@ -100,6 +100,23 @@ export default function HomePage() {
           <Link href="/shop?collection=the-festive-edit" className="text-xs text-white uppercase tracking-wider underline underline-offset-4 hover:text-beige-200">
             Shop now
           </Link>
+        </div>
+      </section>
+
+      {/* ── Conscious Craft ───────────────────────────────── */}
+      <section className="bg-sage-light" aria-label="LADDI sustainability promise">
+        <div className="container-narrow flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 py-5 text-center sm:text-left">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sage text-white" aria-hidden="true">
+            <Leaf size={18} />
+          </div>
+          <div>
+            <p className="text-xs tracking-[0.16em] uppercase text-sage-dark font-semibold">
+              Conscious craft
+            </p>
+            <p className="mt-1 text-sm text-sage-dark">
+              Thoughtful fabrics, made to be loved and worn for longer.
+            </p>
+          </div>
         </div>
       </section>
 
