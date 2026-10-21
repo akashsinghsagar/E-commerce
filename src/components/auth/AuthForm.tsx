@@ -36,6 +36,12 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           setSubmitted(true);
           return;
         }
+        if (mode === 'login') {
+          const { data: isAdmin, error: adminCheckError } = await supabase.rpc('is_admin');
+          if (adminCheckError) throw adminCheckError;
+          router.push(isAdmin === true ? '/admin' : '/account');
+          return;
+        }
       }
       login(values.email.trim().toLowerCase(), values.name.trim(), values.phone.trim());
       router.push('/account');
