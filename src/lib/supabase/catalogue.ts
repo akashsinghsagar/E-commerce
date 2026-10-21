@@ -41,6 +41,9 @@ interface ProductRow {
   fabric: string;
   occasion: string;
   is_active: boolean;
+  is_featured: boolean;
+  is_bestseller: boolean;
+  is_new_arrival: boolean;
   created_at: string;
   updated_at: string;
   categories: CategoryRow | null;
@@ -64,6 +67,9 @@ export interface SupabaseProductInput {
   fabric: string;
   occasion: string;
   active: boolean;
+  featured: boolean;
+  bestseller: boolean;
+  newArrival: boolean;
   images: Array<{ path: string; alt: string; position: number }>;
   variants: Array<{ sku: string; size: string; color: string; price: number; stock: number }>;
 }
@@ -102,16 +108,20 @@ function mapProduct(client: SupabaseClient, row: ProductRow): Product {
     careInstructions: 'Follow garment care label.',
     categoryId: row.category_id || '',
     categoryName: row.categories?.name || 'Uncategorized',
-    collectionIds: [],
+    collectionIds: [
+      ...(row.is_new_arrival ? ['col-001'] : []),
+      ...(row.is_bestseller ? ['col-002'] : []),
+    ],
     images,
     variants,
     tags: row.occasion ? [row.occasion] : [],
     isActive: row.is_active,
-    isFeatured: false,
+    isFeatured: row.is_featured,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     sku: row.sku,
     occasion: row.occasion,
+    isBestseller: row.is_bestseller,
   };
 }
 
@@ -170,6 +180,9 @@ export async function saveSupabaseProduct(client: SupabaseClient, input: Supabas
     fabric: input.fabric,
     occasion: input.occasion,
     is_active: input.active,
+    is_featured: input.featured,
+    is_bestseller: input.bestseller,
+    is_new_arrival: input.newArrival,
   }).select('id').single();
   if (productResult.error) throw productResult.error;
   const productId = String(productResult.data.id);

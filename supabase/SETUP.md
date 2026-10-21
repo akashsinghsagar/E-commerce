@@ -23,12 +23,15 @@ In Supabase Dashboard:
 1. Open **SQL Editor**.
 2. Create a new query.
 3. Paste and run `supabase/migrations/001_catalogue.sql` once.
-4. Confirm that `categories`, `products`, `product_images`,
+4. Paste and run `supabase/migrations/002_product_collections.sql` once.
+5. Confirm that `categories`, `products`, `product_images`,
    `product_variants`, and `profiles` exist under `public`.
-5. Confirm that RLS is enabled on all five public tables.
+6. Confirm that RLS is enabled on all five public tables.
 
-The script does not seed products, delete rows, or alter existing product
-records. It creates the `product-images` bucket only if it does not exist.
+The scripts do not seed products, delete rows, or alter existing product
+records. The second migration adds the merchandising flags used by the
+homepage and collection pages. It creates the `product-images` bucket only if
+it does not exist.
 
 ## 3. Configure the first administrator
 

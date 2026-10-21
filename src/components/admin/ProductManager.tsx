@@ -172,7 +172,10 @@ export default function ProductManager() {
       id: productId, name: form.name.trim(), slug: editing?.slug || `${slugify(form.name)}-${productId.slice(-6)}`,
       description: form.description.trim(), shortDescription: form.shortDescription.trim() || form.description.trim(),
       fabric: form.fabric.trim(), careInstructions: form.careInstructions.trim() || 'Follow garment care label.',
-      categoryId: categoryItem.id, categoryName: categoryItem.name, collectionIds: form.newArrival ? ['col-001'] : [],
+      categoryId: categoryItem.id, categoryName: categoryItem.name, collectionIds: [
+        ...(form.newArrival ? ['col-001'] : []),
+        ...(form.bestseller || form.featured ? ['col-002'] : []),
+      ],
       images, variants, tags: [form.occasion, form.fit].filter(Boolean), isActive: form.active, isFeatured: form.featured,
       isBestseller: form.bestseller, subcategory: form.subcategory.trim(), fit: form.fit.trim(), occasion: form.occasion.trim(),
       sku: form.sku.trim(), createdAt: editing?.createdAt || now, updatedAt: now,
@@ -208,6 +211,9 @@ export default function ProductManager() {
           fabric: product.fabric,
           occasion: product.occasion || '',
           active: product.isActive,
+          featured: product.isFeatured,
+          bestseller: product.isBestseller || false,
+          newArrival: form.newArrival,
           images: paths.map((path, index) => ({ path, alt: `${product.name} image ${index + 1}`, position: index })),
           variants: variants.map((variant) => ({ sku: variant.sku, size: variant.size, color: variant.color, price: variant.price, stock: variant.quantity })),
         });
