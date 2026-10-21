@@ -4,6 +4,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { catalogProducts } from '@/data/products';
 import type { Product } from '@/types';
+import { fetchSupabaseProducts } from '@/lib/supabase/catalogue';
+import { createClient } from '@/lib/supabase/client';
 
 interface ProductStore {
   products: Product[];
@@ -11,6 +13,7 @@ interface ProductStore {
   addProduct: (product: Product) => void;
   updateProduct: (id: string, product: Product) => void;
   deleteProduct: (id: string) => void;
+  loadFromSupabase: () => Promise<void>;
 }
 
 const withoutBlobImages = (product: Product): Product => ({
@@ -37,6 +40,10 @@ export const useProductStore = create<ProductStore>()(
       deleteProduct: (id) => set((state) => ({
         products: state.products.filter((item) => item.id !== id),
       })),
+      loadFromSupabase: async () => {
+        const products = await fetchSupabaseProducts(createClient());
+        set({ products, hydrated: true });
+      },
     }),
     {
       name: 'laddi-demo-products',

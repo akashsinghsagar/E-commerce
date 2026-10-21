@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
+import { createClient } from '@/lib/supabase/client';
+import { isSupabaseConfigured } from '@/lib/supabase/env';
 
 type Mode = 'login' | 'register';
 
@@ -13,16 +15,35 @@ export default function AuthForm({ mode }: { mode: Mode }) {
   const [values, setValues] = useState({ name: '', email: '', phone: '', password: '', confirm: '' });
   const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [busy, setBusy] = useState(false);
 
-  const submit = (event: React.FormEvent) => {
+  const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError('');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) return setError('Enter a valid email address.');
     if (values.password.length < 6) return setError('Use at least 6 characters for the demo password.');
     if (mode === 'register' && !values.name.trim()) return setError('Enter your full name.');
     if (mode === 'register' && values.password !== values.confirm) return setError('Passwords do not match.');
-    login(values.email.trim().toLowerCase(), values.name.trim(), values.phone.trim());
-    router.push('/account');
+    setBusy(true);
+    try {
+      if (isSupabaseConfigured()) {
+        const supabase = createClient();
+        const result = mode === 'login'
+          ? await supabase.auth.signInWithPassword({ email: values.email.trim().toLowerCase(), password: values.password })
+          : await supabase.auth.signUp({ email: values.email.trim().toLowerCase(), password: values.password, options: { data: { full_name: values.name.trim(), phone: values.phone.trim() } } });
+        if (result.error) throw result.error;
+        if (mode === 'register' && !result.data.session) {
+          setSubmitted(true);
+          return;
+        }
+      }
+      login(values.email.trim().toLowerCase(), values.name.trim(), values.phone.trim());
+      router.push('/account');
+    } catch (submissionError) {
+      setError(submissionError instanceof Error ? submissionError.message : 'Unable to complete authentication.');
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (submitted) {
@@ -37,7 +58,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
       <label><span>Password</span><input type="password" value={values.password} onChange={(e) => setValues({ ...values, password: e.target.value })} aria-label="Password" /></label>
       {mode === 'register' && <label><span>Confirm password</span><input type="password" value={values.confirm} onChange={(e) => setValues({ ...values, confirm: e.target.value })} aria-label="Confirm password" /></label>}
       {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
-      <button type="submit" className="btn btn-primary btn-large w-full">{mode === 'login' ? 'Sign in to demo account' : 'Create demo account'}</button>
+      <button type="submit" disabled={busy} className="btn btn-primary btn-large w-full disabled:opacity-50">{busy ? 'Please wait…' : mode === 'login' ? (isSupabaseConfigured() ? 'Sign in' : 'Sign in to demo account') : (isSupabaseConfigured() ? 'Create account' : 'Create demo account')}</button>
       {mode === 'login' ? <div className="flex justify-between text-xs text-muted"><Link href="/forgot-password" className="underline underline-offset-4">Forgot password?</Link><Link href="/register" className="underline underline-offset-4">Create account</Link></div> : <p className="text-center text-xs text-muted">Already have an account? <Link href="/login" className="underline underline-offset-4">Sign in</Link></p>}
     </form>
   );

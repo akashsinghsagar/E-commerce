@@ -2,10 +2,16 @@
 
 import ProductCard from '@/components/product/ProductCard';
 import { useProductStore } from '@/store/products';
+import { isSupabaseConfigured } from '@/lib/supabase/env';
+import { useEffect } from 'react';
 
 export default function HomeProductSections() {
   const products = useProductStore((state) => state.products);
   const hydrated = useProductStore((state) => state.hydrated);
+  const loadFromSupabase = useProductStore((state) => state.loadFromSupabase);
+  useEffect(() => {
+    if (isSupabaseConfigured()) void loadFromSupabase();
+  }, [loadFromSupabase]);
   if (!hydrated) return null;
   const activeProducts = products.filter((product) => product.isActive);
   const newArrivals = activeProducts

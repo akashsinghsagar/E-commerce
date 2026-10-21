@@ -1,13 +1,20 @@
 'use client';
 
 import { useParams } from 'next/navigation';
+import { useEffect } from 'react';
 import ProductDetails from '@/components/product/ProductDetails';
 import { useProductStore } from '@/store/products';
+import { isSupabaseConfigured } from '@/lib/supabase/env';
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const product = useProductStore((state) => state.products.find((item) => item.slug === slug));
   const hydrated = useProductStore((state) => state.hydrated);
+  const loadFromSupabase = useProductStore((state) => state.loadFromSupabase);
+
+  useEffect(() => {
+    if (isSupabaseConfigured()) void loadFromSupabase();
+  }, [loadFromSupabase]);
 
   if (!hydrated) {
     return <main className="min-h-screen bg-ivory"><div className="container-narrow py-24 text-center text-sm text-muted">Loading product…</div></main>;

@@ -1,18 +1,23 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react';
 import ProductCard from '@/components/product/ProductCard';
 import { demoCategories, demoCollections } from '@/data/demo';
-import { catalogProducts, getCatalogPrice } from '@/data/products';
+import { getCatalogPrice } from '@/data/products';
 import { useProductStore } from '@/store/products';
+import { isSupabaseConfigured } from '@/lib/supabase/env';
+import { fetchSupabaseCategories } from '@/lib/supabase/catalogue';
+import { createClient } from '@/lib/supabase/client';
 
 const SORT_OPTIONS = [
   { value: 'newest', label: 'Newest' },
   { value: 'price_low', label: 'Price: Low to High' },
   { value: 'price_high', label: 'Price: High to Low' },
 ];
+
+type ShopCategory = { id: string; name: string; slug: string; isActive: boolean };
 
 export default function ShopContent() {
   const router = useRouter();
@@ -21,6 +26,19 @@ export default function ShopContent() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const productsData = useProductStore((state) => state.products);
   const hydrated = useProductStore((state) => state.hydrated);
+  const loadFromSupabase = useProductStore((state) => state.loadFromSupabase);
+  const [categories, setCategories] = useState<ShopCategory[]>(demoCategories);
+  useEffect(() => {
+    if (isSupabaseConfigured()) void loadFromSupabase();
+    if (isSupabaseConfigured()) {
+      fetchSupabaseCategories(createClient()).then((remote) => setCategories(remote.map((category) => ({
+        id: category.id,
+        name: category.name,
+        slug: category.slug,
+        isActive: category.is_visible,
+      })))).catch(() => undefined);
+    }
+  }, [loadFromSupabase]);
   const search = params.get('search') || '';
   const category = params.get('category') || '';
   const collection = params.get('collection') || '';
@@ -45,7 +63,7 @@ export default function ShopContent() {
       const matchesSearch = !query
         || [product.name, product.categoryName, product.description, ...product.tags]
           .join(' ').toLowerCase().includes(query);
-      const matchesCategory = !category || product.categoryId === demoCategories.find((item) => item.slug === category)?.id;
+      const matchesCategory = !category || product.categoryId === categories.find((item) => item.slug === category)?.id;
       const matchesCollection = !collection || product.collectionIds.includes(
         demoCollections.find((item) => item.slug === collection)?.id || '',
       );
@@ -59,11 +77,11 @@ export default function ShopContent() {
       if (sort === 'price_high') return getCatalogPrice(b) - getCatalogPrice(a);
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
-  }, [category, collection, maxPrice, minPrice, productsData, search, sort]);
+  }, [category, collection, maxPrice, minPrice, productsData, search, sort, categories]);
 
   const title = search
     ? `Search results for “${search}”`
-    : demoCategories.find((item) => item.slug === category)?.name
+    : categories.find((item) => item.slug === category)?.name
       || demoCollections.find((item) => item.slug === collection)?.name
       || 'All pieces';
 

@@ -2,9 +2,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Truck, Shield, Undo2, Sparkles } from 'lucide-react';
 import HomeProductSections from '@/components/home/HomeProductSections';
+import HomeCategories from '@/components/home/HomeCategories';
 import Newsletter from '@/components/sections/Newsletter';
 import {
-  demoCategories,
   demoCollections,
 } from '@/data/demo';
 
@@ -126,38 +126,7 @@ export default function HomePage() {
 
       <HomeProductSections />
 
-      {/* ── Shop by Category ──────────────────────────────── */}
-      <section className="section-padding bg-beige-100" id="shop-by-category">
-        <div className="container-narrow">
-          <div className="text-center mb-10">
-            <p className="text-xs tracking-[0.15em] uppercase text-muted font-medium mb-2">
-              Browse
-            </p>
-            <h2 className="font-serif text-2xl lg:text-3xl text-charcoal">Shop by Category</h2>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6">
-            {demoCategories.filter(c => c.isActive).map((category) => (
-              <Link
-                key={category.id}
-                href={`/shop?category=${category.slug}`}
-                className="group block"
-                id={`category-${category.slug}`}
-              >
-                <div className="aspect-[3/4] bg-beige-300 relative overflow-hidden mb-3 flex items-center justify-center">
-                  <div className="text-center">
-                    <p className="font-serif text-lg text-muted italic">{category.name}</p>
-                  </div>
-                  <div className="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/10 transition-colors duration-300" />
-                </div>
-                <h3 className="text-xs tracking-[0.1em] uppercase text-charcoal font-sans font-semibold text-center group-hover:text-espresso transition-colors">
-                  {category.name}
-                </h3>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HomeCategories />
 
       {/* ── Shop by Occasion ──────────────────────────────── */}
       <section className="section-padding bg-beige-100" id="shop-by-occasion">

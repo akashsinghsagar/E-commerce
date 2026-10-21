@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   BarChart3,
   Boxes,
@@ -18,6 +18,8 @@ import { demoOrders } from '@/data/demo';
 import ProductManager from '@/components/admin/ProductManager';
 import { useProductStore } from '@/store/products';
 import type { Order, OrderStatus, Product } from '@/types';
+import { createClient } from '@/lib/supabase/client';
+import { isSupabaseConfigured } from '@/lib/supabase/env';
 
 type AdminSection = 'overview' | 'products' | 'orders' | 'inventory' | 'customers';
 
@@ -46,11 +48,48 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState('');
   const [orderFilter, setOrderFilter] = useState<'all' | OrderStatus>('all');
   const [loading, setLoading] = useState(false);
+  const [access, setAccess] = useState<'checking' | 'allowed' | 'denied' | 'setup'>(
+    isSupabaseConfigured() ? 'checking' : 'setup',
+  );
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+    const checkAccess = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setAccess('denied');
+        return;
+      }
+      const { data, error } = await supabase.rpc('is_admin');
+      setAccess(!error && data === true ? 'allowed' : 'denied');
+    };
+    void checkAccess();
+  }, []);
 
   const revenue = orders.reduce((sum, order) => sum + order.total, 0);
   const lowStock = products.filter((product) =>
     product.variants.some((variant) => variant.quantity - variant.reservedQuantity <= variant.lowStockThreshold),
   );
+
+  const filteredProducts = useMemo(() => products.filter((product) =>
+    `${product.name} ${product.categoryName}`.toLowerCase().includes(search.toLowerCase()),
+  ), [products, search]);
+
+  const filteredOrders = useMemo(() => orders.filter((order) =>
+    (orderFilter === 'all' || order.orderStatus === orderFilter)
+      && `${order.orderNumber} ${order.deliveryAddress.fullName}`.toLowerCase().includes(search.toLowerCase()),
+  ), [orders, orderFilter, search]);
+
+  if (access === 'checking') {
+    return <main className="min-h-screen bg-ivory"><div className="container-narrow py-24 text-center text-sm text-muted">Verifying administrator access…</div></main>;
+  }
+  if (access === 'denied') {
+    return <main className="min-h-screen bg-ivory"><div className="container-narrow py-24 text-center"><h1 className="font-serif text-3xl">Administrator access required</h1><p className="mt-3 text-sm text-muted">Sign in with an authorized LADDI administrator account.</p><Link href="/login" className="btn btn-primary btn-small mt-6">Sign in</Link></div></main>;
+  }
+  if (access === 'setup') {
+    return <main className="min-h-screen bg-ivory"><div className="container-narrow py-24 text-center"><h1 className="font-serif text-3xl">Supabase setup required</h1><p className="mt-3 text-sm text-muted">Configure the public Supabase environment variables before using the admin dashboard.</p></div></main>;
+  }
 
   const navigate = (next: AdminSection) => {
     setSection(next);
@@ -63,15 +102,6 @@ export default function AdminDashboard() {
       order.id === id ? { ...order, orderStatus: status, updatedAt: new Date().toISOString() } : order
     )));
   };
-
-  const filteredProducts = useMemo(() => products.filter((product) =>
-    `${product.name} ${product.categoryName}`.toLowerCase().includes(search.toLowerCase()),
-  ), [products, search]);
-
-  const filteredOrders = useMemo(() => orders.filter((order) =>
-    (orderFilter === 'all' || order.orderStatus === orderFilter)
-      && `${order.orderNumber} ${order.deliveryAddress.fullName}`.toLowerCase().includes(search.toLowerCase()),
-  ), [orders, orderFilter, search]);
 
   return (
     <main className="min-h-screen bg-ivory">

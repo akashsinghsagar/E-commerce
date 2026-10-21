@@ -41,6 +41,17 @@ export default function ProductImage({ fallbackText, alt, ...props }: ProductIma
     );
   }
 
+  if (typeof props.src === 'string' && props.src.includes('/storage/v1/object/public/product-images/')) {
+    return (
+      <img
+        src={props.src}
+        alt={alt || ''}
+        className={`absolute inset-0 h-full w-full ${props.className || ''}`}
+        onError={() => setHasError(true)}
+      />
+    );
+  }
+
   return (
     <Image
       {...props}

@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { useCartStore } from '@/store/cart';
 
@@ -38,7 +37,7 @@ export default function CartContent() {
           {items.map((item) => (
             <div key={item.id} className="flex gap-4 py-5 sm:gap-6">
               <div className="relative h-36 w-28 flex-shrink-0 overflow-hidden bg-beige-100 sm:h-44 sm:w-36">
-                {item.image ? <Image src={item.image} alt={item.name} fill sizes="144px" className="object-cover" /> : null}
+                {item.image ? <img src={item.image} alt={item.name} className="absolute inset-0 h-full w-full object-cover" /> : null}
               </div>
               <div className="flex min-w-0 flex-1 flex-col">
                 <div className="flex justify-between gap-3">
