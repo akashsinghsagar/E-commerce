@@ -8,14 +8,6 @@ import {
   demoCollections,
 } from '@/data/demo';
 
-// Occasions for "Shop by Occasion"
-const occasions = [
-  { name: 'Festive & Wedding', image: '/demo/occasions/festive.jpg', href: '/shop?category=festive-wear' },
-  { name: 'Work & Office', image: '/demo/occasions/work.jpg', href: '/shop?category=kurtis' },
-  { name: 'Casual Weekend', image: '/demo/occasions/casual.jpg', href: '/shop?category=everyday-wear' },
-  { name: 'Brunch & Travel', image: '/demo/occasions/brunch.jpg', href: '/shop?category=co-ord-sets' },
-];
-
 // Journal entries
 const journalEntries = [
   {
@@ -144,36 +136,6 @@ export default function HomePage() {
       <HomeProductSections />
 
       <HomeCategories />
-
-      {/* ── Shop by Occasion ──────────────────────────────── */}
-      <section className="section-padding bg-beige-100" id="shop-by-occasion">
-        <div className="container-narrow">
-          <div className="text-center mb-10">
-            <p className="text-xs tracking-[0.15em] uppercase text-muted font-medium mb-2">
-              Dress for Every Moment
-            </p>
-            <h2 className="font-serif text-2xl lg:text-3xl text-charcoal">Shop by Occasion</h2>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-            {occasions.map((occ) => (
-              <Link
-                key={occ.name}
-                href={occ.href}
-                className="group block"
-              >
-                <div className="aspect-[4/5] bg-beige-300 relative overflow-hidden mb-3 flex items-center justify-center">
-                  <p className="font-serif text-lg text-muted italic text-center px-4">{occ.name}</p>
-                  <div className="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/10 transition-colors duration-300" />
-                </div>
-                <h3 className="text-xs tracking-[0.1em] uppercase text-charcoal font-sans font-semibold text-center group-hover:text-espresso transition-colors">
-                  {occ.name}
-                </h3>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ── Featured Collections ──────────────────────────── */}
       <section className="section-padding bg-ivory" id="featured-collections">

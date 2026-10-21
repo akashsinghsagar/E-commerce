@@ -6,13 +6,18 @@ import { demoCategories } from '@/data/demo';
 import { fetchSupabaseCategories } from '@/lib/supabase/catalogue';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/env';
+import coOrdImage from '@/data/Screenshot 2026-10-22 000601.png';
+import dressImage from '@/data/Screenshot 2026-10-22 000610.png';
+import everydayImage from '@/data/Screenshot 2026-10-22 000618.png';
+import kurtiImage from '@/data/Screenshot 2026-10-22 000632.png';
+import festiveImage from '@/data/Screenshot 2026-10-22 000625.png';
 
 const categoryImages: Record<string, string> = {
-  kurtis: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85',
-  'co-ord-sets': 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=700&q=85',
-  dresses: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85',
-  'festive-wear': 'https://images.unsplash.com/photo-1610189012906-7c7a3b1f6a1b?auto=format&fit=crop&w=700&q=85',
-  'everyday-wear': 'https://images.unsplash.com/photo-1591369822096-ffd140ec948f?auto=format&fit=crop&w=700&q=85',
+  kurtis: kurtiImage.src,
+  'co-ord-sets': coOrdImage.src,
+  dresses: dressImage.src,
+  'festive-wear': festiveImage.src,
+  'everyday-wear': everydayImage.src,
 };
 
 export default function HomeCategories() {
