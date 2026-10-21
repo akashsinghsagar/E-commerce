@@ -26,6 +26,7 @@ export default function ShopContent() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const productsData = useProductStore((state) => state.products);
   const hydrated = useProductStore((state) => state.hydrated);
+  const productError = useProductStore((state) => state.error);
   const loadFromSupabase = useProductStore((state) => state.loadFromSupabase);
   const [categories, setCategories] = useState<ShopCategory[]>(demoCategories);
   useEffect(() => {
@@ -94,6 +95,11 @@ export default function ShopContent() {
 
   return (
     <div className="min-h-screen bg-ivory">
+      {productError && (
+        <div role="alert" className="bg-red-50 px-6 py-3 text-center text-sm text-red-800">
+          We could not refresh the catalogue. Showing saved products instead. {productError}
+        </div>
+      )}
       <section className="border-b border-taupe bg-beige-100">
         <div className="container-narrow py-12 text-center lg:py-16">
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-muted">The LADDI edit</p>

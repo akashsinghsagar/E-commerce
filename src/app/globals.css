@@ -245,6 +245,16 @@ label {
   margin-bottom: 0.375rem;
 }
 
+label > span:first-child {
+  display: block;
+  margin-bottom: 0.375rem;
+}
+
+label > input[type="checkbox"],
+label > input[type="radio"] {
+  width: auto;
+}
+
 /* ============================================================
    Scrollbar Styling
    ============================================================ */
@@ -308,6 +318,9 @@ label {
    ============================================================ */
 
 .product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   transition: transform 0.3s ease;
 }
 
@@ -317,6 +330,62 @@ label {
 
 .product-card .product-image {
   overflow: hidden;
+}
+
+.product-card > a {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.product-card > a > .product-image {
+  flex-shrink: 0;
+}
+
+.product-card .product-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.product-card .product-title {
+  min-height: 2.75rem;
+}
+
+.account-page input:not([type="checkbox"]),
+.account-page input:not([type="radio"]) {
+  background-color: #FFFFFF;
+  border-width: 1px;
+  border-color: var(--color-taupe);
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.account-page input:not([type="checkbox"]):focus,
+.account-page input:not([type="radio"]):focus {
+  border-color: var(--color-espresso);
+}
+
+@media (max-width: 640px) {
+  .account-page .account-header {
+    align-items: flex-start;
+    padding-bottom: 1.5rem;
+  }
+
+  .account-page .account-header h1 {
+    font-size: 2.25rem;
+    max-width: 16ch;
+  }
+
+  .account-page .account-section {
+    margin-top: 2.5rem;
+  }
+
+  .account-page .account-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
 .product-card .product-image img {

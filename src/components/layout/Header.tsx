@@ -6,6 +6,7 @@ import { Search, Heart, ShoppingBag, User, Menu, X } from 'lucide-react';
 import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
 import { useAuthStore } from '@/store/auth';
+import ClickSpark from '@/components/effects/ClickSpark';
 
 const navigation = [
   { name: 'New Arrivals', href: '/shop?collection=new-arrivals' },
@@ -101,48 +102,56 @@ export default function Header() {
 
             {/* Action icons */}
             <div className="flex items-center gap-2.5 lg:gap-4" id="header-actions">
-              <button
-                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="text-charcoal hover:text-espresso transition-colors p-1"
-                aria-label="Search"
-                id="search-toggle"
-              >
-                <Search size={20} />
-              </button>
-              <Link
-                href="/wishlist"
-                className="text-charcoal hover:text-espresso transition-colors p-1 relative"
-                aria-label="Wishlist"
-                id="wishlist-link"
-              >
-                <Heart size={20} />
-                {mounted && wishlistItems.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-espresso text-white text-[10px] font-semibold w-4 h-4 rounded-full flex items-center justify-center">
-                    {wishlistItems.length}
-                  </span>
-                )}
-              </Link>
-              <Link
-                href={user ? '/account' : '/login'}
-                className="hidden sm:block text-charcoal hover:text-espresso transition-colors p-1"
-                aria-label={user ? 'Account' : 'Sign in'}
-                id="account-link"
-              >
-                <User size={20} />
-              </Link>
-              <Link
-                href="/cart"
-                className="text-charcoal hover:text-espresso transition-colors p-1 relative"
-                aria-label="Shopping cart"
-                id="cart-link"
-              >
-                <ShoppingBag size={20} />
-                {mounted && cartItemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-espresso text-white text-[10px] font-semibold w-4 h-4 rounded-full flex items-center justify-center">
-                    {cartItemCount}
-                  </span>
-                )}
-              </Link>
+              <ClickSpark className="h-7 w-7" sparkColor="#6F2338" sparkSize={8} sparkRadius={18} sparkCount={7} duration={400}>
+                <button
+                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  className="flex h-7 w-7 items-center justify-center text-charcoal transition-colors hover:text-espresso"
+                  aria-label="Search"
+                  id="search-toggle"
+                >
+                  <Search size={20} />
+                </button>
+              </ClickSpark>
+              <ClickSpark className="relative h-7 w-7" sparkColor="#6F2338" sparkSize={8} sparkRadius={18} sparkCount={7} duration={400}>
+                <Link
+                  href="/wishlist"
+                  className="relative flex h-7 w-7 items-center justify-center text-charcoal transition-colors hover:text-espresso"
+                  aria-label="Wishlist"
+                  id="wishlist-link"
+                >
+                  <Heart size={20} />
+                  {mounted && wishlistItems.length > 0 && (
+                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-espresso text-[10px] font-semibold text-white">
+                      {wishlistItems.length}
+                    </span>
+                  )}
+                </Link>
+              </ClickSpark>
+              <ClickSpark className="hidden h-7 w-7 sm:block" sparkColor="#6F2338" sparkSize={8} sparkRadius={18} sparkCount={7} duration={400}>
+                <Link
+                  href={user ? '/account' : '/login'}
+                  className="flex h-7 w-7 items-center justify-center text-charcoal transition-colors hover:text-espresso"
+                  aria-label={user ? 'Account' : 'Sign in'}
+                  id="account-link"
+                >
+                  <User size={20} />
+                </Link>
+              </ClickSpark>
+              <ClickSpark className="relative h-7 w-7" sparkColor="#6F2338" sparkSize={8} sparkRadius={18} sparkCount={7} duration={400}>
+                <Link
+                  href="/cart"
+                  className="relative flex h-7 w-7 items-center justify-center text-charcoal transition-colors hover:text-espresso"
+                  aria-label="Shopping cart"
+                  id="cart-link"
+                >
+                  <ShoppingBag size={20} />
+                  {mounted && cartItemCount > 0 && (
+                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-espresso text-[10px] font-semibold text-white">
+                      {cartItemCount}
+                    </span>
+                  )}
+                </Link>
+              </ClickSpark>
             </div>
           </div>
         </div>
@@ -158,7 +167,7 @@ export default function Header() {
                   placeholder="Search for kurtis, dresses, co-ord sets..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="flex-1 border-none bg-transparent text-sm focus:outline-none placeholder:text-muted"
+                  className="min-w-0 w-auto flex-1 border-none bg-transparent text-sm focus:outline-none placeholder:text-muted"
                   autoFocus
                   id="search-input"
                 />

@@ -128,7 +128,7 @@ function mapProduct(client: SupabaseClient, row: ProductRow): Product {
 export async function fetchSupabaseProducts(client: SupabaseClient) {
   const result = await client
     .from('products')
-    .select('*, categories(id,name,slug,is_visible), product_images(id,storage_path,alt,position), product_variants(id,product_id,sku,size,color,price_inr,stock_quantity)')
+    .select('*, categories!products_category_id_fkey(id,name,slug,is_visible), product_images(id,storage_path,alt,position), product_variants(id,product_id,sku,size,color,price_inr,stock_quantity)')
     .eq('is_active', true)
     .order('created_at', { ascending: false });
   if (result.error) throw result.error;
@@ -138,7 +138,7 @@ export async function fetchSupabaseProducts(client: SupabaseClient) {
 export async function fetchAdminProducts(client: SupabaseClient) {
   const result = await client
     .from('products')
-    .select('*, categories(id,name,slug,is_visible), product_images(id,storage_path,alt,position), product_variants(id,product_id,sku,size,color,price_inr,stock_quantity)')
+    .select('*, categories!products_category_id_fkey(id,name,slug,is_visible), product_images(id,storage_path,alt,position), product_variants(id,product_id,sku,size,color,price_inr,stock_quantity)')
     .order('created_at', { ascending: false });
   if (result.error) throw result.error;
   return ((result.data || []) as ProductRow[]).map((row) => mapProduct(client, row));

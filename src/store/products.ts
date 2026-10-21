@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/client';
 interface ProductStore {
   products: Product[];
   hydrated: boolean;
+  error: string | null;
   addProduct: (product: Product) => void;
   updateProduct: (id: string, product: Product) => void;
   deleteProduct: (id: string) => void;
@@ -33,6 +34,7 @@ export const useProductStore = create<ProductStore>()(
     (set) => ({
       products: catalogProducts,
       hydrated: false,
+      error: null,
       addProduct: (product) => set((state) => ({ products: [...state.products, product] })),
       updateProduct: (id, product) => set((state) => ({
         products: state.products.map((item) => item.id === id ? product : item),
@@ -41,8 +43,18 @@ export const useProductStore = create<ProductStore>()(
         products: state.products.filter((item) => item.id !== id),
       })),
       loadFromSupabase: async () => {
-        const products = await fetchSupabaseProducts(createClient());
-        set({ products, hydrated: true });
+        set({ error: null });
+        try {
+          const products = await fetchSupabaseProducts(createClient());
+          set({ products, hydrated: true });
+        } catch (loadError) {
+          const message = loadError instanceof Error
+            ? loadError.message
+            : typeof loadError === 'object' && loadError !== null && 'message' in loadError
+              ? String((loadError as { message: unknown }).message)
+              : 'Unable to load products from Supabase.';
+          set({ hydrated: true, error: message });
+        }
       },
     }),
     {

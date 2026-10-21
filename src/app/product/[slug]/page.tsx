@@ -10,6 +10,7 @@ export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const product = useProductStore((state) => state.products.find((item) => item.slug === slug));
   const hydrated = useProductStore((state) => state.hydrated);
+  const productError = useProductStore((state) => state.error);
   const loadFromSupabase = useProductStore((state) => state.loadFromSupabase);
 
   useEffect(() => {
@@ -18,6 +19,17 @@ export default function ProductPage() {
 
   if (!hydrated) {
     return <main className="min-h-screen bg-ivory"><div className="container-narrow py-24 text-center text-sm text-muted">Loading product…</div></main>;
+  }
+
+  if (productError) {
+    return (
+      <main className="min-h-screen bg-ivory">
+        <div className="container-narrow py-24 text-center">
+          <h1 className="font-serif text-3xl">Unable to load this product</h1>
+          <p role="alert" className="mt-3 text-sm text-red-700">{productError}</p>
+        </div>
+      </main>
+    );
   }
 
   if (!product || !product.isActive) {

@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 export default function HomeProductSections() {
   const products = useProductStore((state) => state.products);
   const hydrated = useProductStore((state) => state.hydrated);
+  const error = useProductStore((state) => state.error);
   const loadFromSupabase = useProductStore((state) => state.loadFromSupabase);
   useEffect(() => {
     if (isSupabaseConfigured()) void loadFromSupabase();
@@ -23,6 +24,11 @@ export default function HomeProductSections() {
 
   return (
     <>
+      {error && (
+        <div role="alert" className="bg-red-50 px-6 py-3 text-center text-sm text-red-800">
+          We could not refresh the catalogue. Showing saved products instead. {error}
+        </div>
+      )}
       <section className="section-padding bg-ivory" id="new-arrivals">
         <div className="container-narrow">
           <div className="flex items-end justify-between mb-10">

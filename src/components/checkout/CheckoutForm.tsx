@@ -27,6 +27,7 @@ export default function CheckoutForm() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<Partial<FormValues>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [completedOrder, setCompletedOrder] = useState<string | null>(null);
 
   const validate = () => {
     const next: Partial<FormValues> = {};
@@ -47,7 +48,8 @@ export default function CheckoutForm() {
     const orderNumber = `DEMO-${Date.now().toString().slice(-8)}`;
     localStorage.setItem('laddi-demo-order', JSON.stringify({ orderNumber, customer: values, items, subtotal, shipping, discount, total }));
     clearCart();
-    router.push(`/order-confirmation?order=${orderNumber}`);
+    setCompletedOrder(orderNumber);
+    setSubmitting(false);
   };
 
   if (items.length === 0) {
@@ -63,7 +65,8 @@ export default function CheckoutForm() {
   );
 
   return (
-    <form onSubmit={submit} className="container-narrow py-12 lg:py-16">
+    <>
+      <form onSubmit={submit} className="container-narrow py-12 lg:py-16">
       <div className="mb-8 border border-espresso/30 bg-espresso/5 p-4 text-sm text-espresso"><strong>Demo checkout:</strong> no payment is processed and no real order is placed.</div>
       <div className="grid gap-12 lg:grid-cols-[1fr_360px]">
         <div>
@@ -96,6 +99,19 @@ export default function CheckoutForm() {
           <button type="submit" disabled={submitting} className="btn btn-primary mt-7 w-full">{submitting ? 'Submitting demo order...' : 'Place demo order'}</button>
         </aside>
       </div>
-    </form>
+      </form>
+      {completedOrder && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-charcoal/45 px-5" role="dialog" aria-modal="true" aria-labelledby="order-received-title">
+          <div className="w-full max-w-md border border-taupe bg-ivory p-7 text-center shadow-2xl sm:p-10">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-espresso text-2xl text-white">✓</div>
+            <p className="mt-5 text-xs font-medium uppercase tracking-[0.2em] text-espresso">Order received</p>
+            <h2 id="order-received-title" className="mt-3 font-serif text-3xl">Your order is confirmed</h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted">Thank you, {values.name}. Your LADDI order has been received and is being prepared for delivery.</p>
+            <p className="mt-5 border border-taupe px-4 py-3 text-sm">Reference: <strong>{completedOrder}</strong></p>
+            <button type="button" className="btn btn-primary btn-large mt-7 w-full" onClick={() => router.push(`/order-confirmation?order=${completedOrder}`)}>View order details</button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

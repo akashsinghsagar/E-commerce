@@ -30,7 +30,7 @@ export default function Footer() {
     <footer className="bg-charcoal text-white" id="site-footer">
       {/* Main footer */}
       <div className="container-narrow py-16 lg:py-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-12">
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block mb-5">
@@ -71,7 +71,7 @@ export default function Footer() {
 
           {/* Shop links */}
           <div>
-            <h4 className="text-xs tracking-[0.15em] uppercase text-white font-sans font-semibold mb-5">
+            <h4 className="mb-5 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-white">
               Shop
             </h4>
             <ul className="space-y-3">
@@ -90,7 +90,7 @@ export default function Footer() {
 
           {/* Company links */}
           <div>
-            <h4 className="text-xs tracking-[0.15em] uppercase text-white font-sans font-semibold mb-5">
+            <h4 className="mb-5 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-white">
               Company
             </h4>
             <ul className="space-y-3">
@@ -109,7 +109,7 @@ export default function Footer() {
 
           {/* Help links */}
           <div>
-            <h4 className="text-xs tracking-[0.15em] uppercase text-white font-sans font-semibold mb-5">
+            <h4 className="mb-5 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-white">
               Help
             </h4>
             <ul className="space-y-3">

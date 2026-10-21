@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
 import { createClient } from '@/lib/supabase/client';
@@ -12,10 +12,18 @@ type Mode = 'login' | 'register';
 export default function AuthForm({ mode }: { mode: Mode }) {
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
+  const syncSupabaseUser = useAuthStore((state) => state.syncSupabaseUser);
+  const user = useAuthStore((state) => state.user);
+  const authStatus = useAuthStore((state) => state.status);
   const [values, setValues] = useState({ name: '', email: '', phone: '', password: '', confirm: '' });
   const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (mode !== 'login' || authStatus !== 'authenticated' || !user || busy) return;
+    router.replace(user.role === 'admin' ? '/admin' : '/account');
+  }, [authStatus, busy, mode, router, user]);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -37,13 +45,16 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           return;
         }
         if (mode === 'login') {
-          const { data: isAdmin, error: adminCheckError } = await supabase.rpc('is_admin');
-          if (adminCheckError) throw adminCheckError;
-          router.push(isAdmin === true ? '/admin' : '/account');
+          if (!result.data.user || !result.data.session) {
+            throw new Error('Authentication succeeded without an active session. Please try again.');
+          }
+          const profile = await syncSupabaseUser(result.data.user);
+          router.push(profile.role === 'admin' ? '/admin' : '/account');
           return;
         }
       }
       login(values.email.trim().toLowerCase(), values.name.trim(), values.phone.trim());
+      useAuthStore.setState({ status: 'authenticated', error: null });
       router.push('/account');
     } catch (submissionError) {
       setError(submissionError instanceof Error ? submissionError.message : 'Unable to complete authentication.');

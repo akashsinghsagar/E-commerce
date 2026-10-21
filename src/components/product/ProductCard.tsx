@@ -8,6 +8,7 @@ import { getAvailableColors, getAvailableQuantity, getMinPrice } from '@/data/de
 import { useWishlistStore } from '@/store/wishlist';
 import { useCartStore } from '@/store/cart';
 import ProductImage from './ProductImage';
+import ClickSpark from '@/components/effects/ClickSpark';
 
 interface ProductCardProps {
   product: Product;
@@ -74,17 +75,19 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
           />
 
           {/* Wishlist button */}
-          <button
-            onClick={handleWishlistToggle}
-            className={`absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full transition-all duration-200 ${
-              wishlisted
-                ? 'bg-espresso text-white'
-                : 'bg-white/80 text-charcoal hover:bg-white'
-            }`}
-            aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-          >
-            <Heart size={16} fill={wishlisted ? 'currentColor' : 'none'} />
-          </button>
+          <ClickSpark className="absolute right-3 top-3 h-9 w-9 rounded-full" sparkColor="#ffffff" sparkSize={10} sparkRadius={22} sparkCount={8} duration={450}>
+            <button
+              onClick={handleWishlistToggle}
+              className={`flex h-9 w-9 items-center justify-center rounded-full transition-all duration-200 ${
+                wishlisted
+                  ? 'bg-espresso text-white'
+                  : 'bg-white/80 text-charcoal hover:bg-white'
+              }`}
+              aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+            >
+              <Heart size={16} fill={wishlisted ? 'currentColor' : 'none'} />
+            </button>
+          </ClickSpark>
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">
@@ -98,11 +101,11 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
         </div>
 
         {/* Info */}
-        <div className="space-y-1.5 px-0.5">
+        <div className="product-info space-y-1.5 px-0.5">
           <p className="text-xs text-muted tracking-[0.05em] uppercase font-medium">
             {product.categoryName}
           </p>
-          <h3 className="text-sm font-sans font-medium text-charcoal leading-snug group-hover:text-espresso transition-colors">
+          <h3 className="product-title text-sm font-sans font-medium text-charcoal leading-snug group-hover:text-espresso transition-colors">
             {product.name}
           </h3>
           <div className="flex items-center gap-2">
